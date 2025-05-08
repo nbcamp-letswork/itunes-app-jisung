@@ -6,8 +6,12 @@ final class AppDIContainer {
     init() {
         container = Container()
 
-        registerDependencies()
+        registerHomeDependencies()
     }
 
-    private func registerDependencies() {}
+    private func registerHomeDependencies() {
+        container.register(FetchMusicDataSource.self) { _ in
+            FetchMusicDataSource()
+        }
+    }
 }
