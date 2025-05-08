@@ -13,5 +13,11 @@ final class AppDIContainer {
         container.register(FetchMusicDataSource.self) { _ in
             FetchMusicDataSource()
         }
+
+        container.register(MusicRepository.self) { resolver in
+            let dataSource = resolver.resolve(FetchMusicDataSource.self)!
+
+            return DefaultMusicRepository(fetchMusicDataSource: dataSource)
+        }
     }
 }
