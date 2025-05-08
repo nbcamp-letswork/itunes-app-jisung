@@ -25,5 +25,12 @@ final class AppDIContainer {
 
             return DefaultFetchMusicUseCase(musicRepository: musicRepository)
         }
+
+        container.register(HomeViewModel.self) { resolver in
+            let useCase = resolver.resolve(FetchMusicUseCase.self)!
+
+            return HomeViewModel(fetchMusicUseCase: useCase)
+        }
+        .inObjectScope(.container)
     }
 }
