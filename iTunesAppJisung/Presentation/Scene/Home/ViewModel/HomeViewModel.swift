@@ -7,7 +7,7 @@ final class HomeViewModel {
     private let disposeBag = DisposeBag()
 
     let musicSections = BehaviorRelay<[MusicSection]>(value: [])
-    let selectedMusic = BehaviorRelay<Music?>(value: nil)
+    let selectedMusic = BehaviorRelay<Media?>(value: nil)
 
     init(fetchMusicUseCase: FetchMusicUseCase) {
         self.fetchMusicUseCase = fetchMusicUseCase
@@ -32,7 +32,7 @@ final class HomeViewModel {
             .disposed(by: disposeBag)
     }
 
-    private func fetchMusicObservable(for season: Season) -> Observable<[Music]> {
+    private func fetchMusicObservable(for season: Season) -> Observable<[Media]> {
         Observable.create { [weak self] observer in
             let limit: Int? = season == .spring ? HomeConstant.Carousel.itemCount : nil
 
@@ -49,7 +49,7 @@ final class HomeViewModel {
         }
     }
 
-    func selectMusic(_ music: Music) {
+    func selectMusic(_ music: Media) {
         selectedMusic.accept(music)
     }
 }

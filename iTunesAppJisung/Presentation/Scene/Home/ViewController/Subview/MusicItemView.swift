@@ -51,10 +51,10 @@ final class MusicItemView: UIView {
         }
     }
 
-    func updateUI(with music: Music) {
+    func updateUI(with music: Media) {
         titleLabel.text = music.title
-        artistLabel.text = music.artist
-        albumLabel.text = music.album
+        artistLabel.text = music.creatorName
+        albumLabel.text = music.sourceTitle
         artworkImageView.kf.setImage(with: music.artworkURL)
     }
 }

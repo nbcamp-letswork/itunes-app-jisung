@@ -1,6 +1,6 @@
 import Foundation
 
-struct MusicItem: Decodable {
+struct MediaItem: Decodable {
     let trackName: String
     let artistName: String
     let collectionName: String?

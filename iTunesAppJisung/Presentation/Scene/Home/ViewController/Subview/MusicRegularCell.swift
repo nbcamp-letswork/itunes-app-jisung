@@ -32,7 +32,7 @@ final class MusicRegularCell: UICollectionViewCell, ReuseIdentifier {
         }
     }
 
-    func updateUI(with musics: [Music]) {
+    func updateUI(with musics: [Media]) {
         for (index, itemView) in itemViews.enumerated() {
             if index < musics.count {
                 itemView.isHidden = false

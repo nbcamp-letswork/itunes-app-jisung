@@ -7,15 +7,15 @@ final class DefaultMusicRepository: MusicRepository {
         self.fetchMusicDataSource = fetchMusicDataSource
     }
 
-    func fetch(keyword: String, limit: Int?, completion: @escaping (Result<[Music], Error>) -> Void) {
+    func fetch(keyword: String, limit: Int?, completion: @escaping (Result<[Media], Error>) -> Void) {
         fetchMusicDataSource.execute(for: keyword, limit: limit) { result in
             switch result {
             case let .success(items):
                 let musics = items.map { item in
-                    Music(
+                    Media(
                         title: item.trackName,
-                        artist: item.artistName,
-                        album: item.collectionName,
+                        creatorName: item.artistName,
+                        sourceTitle: item.collectionName,
                         artworkURL: item.artworkUrl100
                     )
                 }

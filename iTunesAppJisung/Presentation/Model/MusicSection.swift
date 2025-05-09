@@ -1,4 +1,4 @@
 struct MusicSection {
     let season: Season
-    let musics: [Music]
+    let musics: [Media]
 }

@@ -49,9 +49,9 @@ final class MusicSectionFooterView: UICollectionReusableView, ReuseIdentifier {
         }
     }
 
-    func updateUI(with music: Music) {
+    func updateUI(with music: Media) {
         imageView.kf.setImage(with: music.artworkURL)
         titleLabel.text = music.title
-        artistLabel.text = music.artist
+        artistLabel.text = music.creatorName
     }
 }

@@ -1,8 +1,7 @@
 import Alamofire
 
 struct FetchMusicDataSource {
-    func execute(for keyword: String, limit: Int?, completion: @escaping (Result<[MusicItem], Error>) -> Void) {
-        let baseURL = "https://itunes.apple.com/search"
+    func execute(for keyword: String, limit: Int?, completion: @escaping (Result<[MediaItem], Error>) -> Void) {
         var parameters: Parameters = [
             "media": "music",
             "term": keyword,
@@ -12,9 +11,9 @@ struct FetchMusicDataSource {
             parameters["limit"] = limit
         }
 
-        AF.request(baseURL, parameters: parameters)
+        AF.request(DataConstant.baseURL, parameters: parameters)
             .validate()
-            .responseDecodable(of: MusicResponse.self) { response in
+            .responseDecodable(of: MediaResponse.self) { response in
                 switch response.result {
                 case let .success(musicResponse):
                     completion(.success(musicResponse.results))
