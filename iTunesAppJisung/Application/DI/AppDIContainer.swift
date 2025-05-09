@@ -6,11 +6,32 @@ final class AppDIContainer {
     init() {
         container = Container()
 
-        registerMainDependencies()
-        registerHomeDependencies()
+        registerDataDependencies()
+        registerDomainDependencies()
+        registerPresentationDependencies()
     }
 
-    private func registerMainDependencies() {
+    private func registerDataDependencies() {
+        container.register(FetchMediaDataSource.self) { _ in
+            FetchMediaDataSource()
+        }
+
+        container.register(MediaRepository.self) { resolver in
+            let dataSource = resolver.resolve(FetchMediaDataSource.self)!
+
+            return DefaultMediaRepository(fetchMediaDataSource: dataSource)
+        }
+    }
+
+    private func registerDomainDependencies() {
+        container.register(FetchMediaUseCase.self) { resolver in
+            let mediaRepository = resolver.resolve(MediaRepository.self)!
+
+            return DefaultFetchMediaUseCase(mediaRepository: mediaRepository)
+        }
+    }
+
+    private func registerPresentationDependencies() {
         container.register(MainViewController.self) { _ in
             MainViewController()
         }
@@ -23,29 +44,11 @@ final class AppDIContainer {
             return MainCoordinator(mainViewController: mainViewController, homeViewController: homeViewController)
         }
         .inObjectScope(.container)
-    }
-
-    private func registerHomeDependencies() {
-        container.register(FetchMusicDataSource.self) { _ in
-            FetchMusicDataSource()
-        }
-
-        container.register(MusicRepository.self) { resolver in
-            let dataSource = resolver.resolve(FetchMusicDataSource.self)!
-
-            return DefaultMusicRepository(fetchMusicDataSource: dataSource)
-        }
-
-        container.register(FetchMusicUseCase.self) { resolver in
-            let musicRepository = resolver.resolve(MusicRepository.self)!
-
-            return DefaultFetchMusicUseCase(musicRepository: musicRepository)
-        }
 
         container.register(HomeViewModel.self) { resolver in
-            let useCase = resolver.resolve(FetchMusicUseCase.self)!
+            let useCase = resolver.resolve(FetchMediaUseCase.self)!
 
-            return HomeViewModel(fetchMusicUseCase: useCase)
+            return HomeViewModel(fetchMediaUseCase: useCase)
         }
         .inObjectScope(.container)
 

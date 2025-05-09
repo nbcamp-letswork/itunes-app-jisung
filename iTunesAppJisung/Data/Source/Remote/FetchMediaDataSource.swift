@@ -1,9 +1,14 @@
 import Alamofire
 
-struct FetchMusicDataSource {
-    func execute(for keyword: String, limit: Int?, completion: @escaping (Result<[MediaItem], Error>) -> Void) {
+struct FetchMediaDataSource {
+    func execute(
+        for keyword: String,
+        mediaType: MediaType,
+        limit: Int?,
+        completion: @escaping (Result<[MediaItem], Error>) -> Void
+    ) {
         var parameters: Parameters = [
-            "media": "music",
+            "media": mediaType.rawValue,
             "term": keyword,
         ]
 
@@ -15,8 +20,8 @@ struct FetchMusicDataSource {
             .validate()
             .responseDecodable(of: MediaResponse.self) { response in
                 switch response.result {
-                case let .success(musicResponse):
-                    completion(.success(musicResponse.results))
+                case let .success(mediaResponse):
+                    completion(.success(mediaResponse.results))
                 case let .failure(error):
                     completion(.failure(error))
                 }

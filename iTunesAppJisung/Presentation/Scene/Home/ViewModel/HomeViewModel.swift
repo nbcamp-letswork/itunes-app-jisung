@@ -2,15 +2,15 @@ import RxCocoa
 import RxSwift
 
 final class HomeViewModel {
-    private let fetchMusicUseCase: FetchMusicUseCase
+    private let fetchMediaUseCase: FetchMediaUseCase
 
     private let disposeBag = DisposeBag()
 
     let musicSections = BehaviorRelay<[MusicSection]>(value: [])
     let selectedMusic = BehaviorRelay<Media?>(value: nil)
 
-    init(fetchMusicUseCase: FetchMusicUseCase) {
-        self.fetchMusicUseCase = fetchMusicUseCase
+    init(fetchMediaUseCase: FetchMediaUseCase) {
+        self.fetchMediaUseCase = fetchMediaUseCase
 
         fetchAllSeasonsMusic()
     }
@@ -36,7 +36,7 @@ final class HomeViewModel {
         Observable.create { [weak self] observer in
             let limit: Int? = season == .spring ? HomeConstant.Carousel.itemCount : nil
 
-            self?.fetchMusicUseCase.execute(for: season.keyword, limit: limit) { result in
+            self?.fetchMediaUseCase.execute(for: season.keyword, mediaType: .music, limit: limit) { result in
                 switch result {
                 case let .success(musics):
                     observer.onNext(musics)
