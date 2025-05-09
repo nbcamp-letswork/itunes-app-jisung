@@ -10,6 +10,7 @@ final class HomeViewModel {
     let searchTrigger: Observable<String>
     let cancelSearchTrigger = PublishSubject<Void>()
     let musicSections = BehaviorRelay<[MusicSection]>(value: [])
+    let selectedMusic = BehaviorRelay<Music?>(value: nil)
 
     init(fetchMusicUseCase: FetchMusicUseCase) {
         self.fetchMusicUseCase = fetchMusicUseCase
@@ -17,7 +18,6 @@ final class HomeViewModel {
         searchTrigger = query
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
-            .distinctUntilChanged()
 
         fetchAllSeasonsMusic()
     }
@@ -27,7 +27,7 @@ final class HomeViewModel {
             .flatMap { [weak self] season -> Observable<MusicSection?> in
                 guard let self else { return .just(nil) }
 
-                return self.fetchMusicObservable(for: season.keyword)
+                return self.fetchMusicObservable(for: season)
                     .map { musics in
                         MusicSection(season: season, musics: musics)
                     }
@@ -39,9 +39,11 @@ final class HomeViewModel {
             .disposed(by: disposeBag)
     }
 
-    private func fetchMusicObservable(for keyword: String) -> Observable<[Music]> {
-        return Observable.create { [weak self] observer in
-            self?.fetchMusicUseCase.execute(for: keyword) { result in
+    private func fetchMusicObservable(for season: Season) -> Observable<[Music]> {
+        Observable.create { [weak self] observer in
+            let limit: Int? = season == .spring ? HomeConstant.Carousel.itemCount : nil
+
+            self?.fetchMusicUseCase.execute(for: season.keyword, limit: limit) { result in
                 switch result {
                 case let .success(musics):
                     observer.onNext(musics)
@@ -52,5 +54,9 @@ final class HomeViewModel {
             }
             return Disposables.create()
         }
+    }
+
+    func selectMusic(_ music: Music) {
+        selectedMusic.accept(music)
     }
 }

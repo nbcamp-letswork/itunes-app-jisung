@@ -4,6 +4,10 @@ enum Season: CaseIterable {
          autumn,
          winter
 
+    var index: Int? {
+        Season.allCases.firstIndex(of: self)
+    }
+
     var keyword: String {
         switch self {
         case .spring: return HomeConstant.Keyword.spring
@@ -13,12 +17,21 @@ enum Season: CaseIterable {
         }
     }
 
-    var header: String {
+    var title: String {
         switch self {
-        case .spring: return HomeConstant.Label.spring
-        case .summer: return HomeConstant.Label.summer
-        case .autumn: return HomeConstant.Label.autumn
-        case .winter: return HomeConstant.Label.winter
+        case .spring: return HomeConstant.Label.springTitle
+        case .summer: return HomeConstant.Label.summerTitle
+        case .autumn: return HomeConstant.Label.autumnTitle
+        case .winter: return HomeConstant.Label.winterTitle
+        }
+    }
+
+    var subTitle: String {
+        switch self {
+        case .spring: return HomeConstant.Label.springSubTitle
+        case .summer: return HomeConstant.Label.summerSubTitle
+        case .autumn: return HomeConstant.Label.autumnSubTitle
+        case .winter: return HomeConstant.Label.winterSubTitle
         }
     }
 }

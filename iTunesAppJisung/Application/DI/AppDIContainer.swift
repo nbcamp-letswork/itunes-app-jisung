@@ -32,5 +32,17 @@ final class AppDIContainer {
             return HomeViewModel(fetchMusicUseCase: useCase)
         }
         .inObjectScope(.container)
+
+        container.register(HomeViewController.self) { resolver in
+            let viewModel = resolver.resolve(HomeViewModel.self)!
+
+            return HomeViewController(homeViewModel: viewModel)
+        }
+
+        container.register(HomeCoordinator.self) { resolver in
+            let viewController = resolver.resolve(HomeViewController.self)!
+
+            return HomeCoordinator(homeViewController: viewController)
+        }
     }
 }

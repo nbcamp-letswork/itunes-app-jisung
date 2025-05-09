@@ -1,12 +1,16 @@
 import Alamofire
 
 struct FetchMusicDataSource {
-    func execute(for keyword: String, completion: @escaping (Result<[MusicItem], Error>) -> Void) {
+    func execute(for keyword: String, limit: Int?, completion: @escaping (Result<[MusicItem], Error>) -> Void) {
         let baseURL = "https://itunes.apple.com/search"
-        let parameters: Parameters = [
+        var parameters: Parameters = [
             "media": "music",
             "term": keyword,
         ]
+
+        if limit != nil {
+            parameters["limit"] = limit
+        }
 
         AF.request(baseURL, parameters: parameters)
             .validate()

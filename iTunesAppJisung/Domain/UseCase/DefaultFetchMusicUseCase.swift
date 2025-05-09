@@ -5,7 +5,7 @@ final class DefaultFetchMusicUseCase: FetchMusicUseCase {
         self.musicRepository = musicRepository
     }
 
-    func execute(for keyword: String, completion: @escaping (Result<[Music], Error>) -> Void) {
-        musicRepository.fetch(keyword: keyword, completion: completion)
+    func execute(for keyword: String, limit: Int?, completion: @escaping (Result<[Music], Error>) -> Void) {
+        musicRepository.fetch(keyword: keyword, limit: limit, completion: completion)
     }
 }
