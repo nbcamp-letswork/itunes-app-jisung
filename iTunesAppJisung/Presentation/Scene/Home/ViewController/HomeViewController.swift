@@ -3,13 +3,13 @@ import RxSwift
 import SnapKit
 import UIKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     let homeViewModel: HomeViewModel
+
+    weak var delegate: HomeViewControllerDelegate?
 
     private let disposeBag = DisposeBag()
 
-    var searchController = UISearchController()
-    private let contentView = UIView()
     let musicCollectionView = MusicCollectionView()
 
     init(homeViewModel: HomeViewModel) {
@@ -26,36 +26,19 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
 
         configureNavigationBar()
-        configureSearchController()
         configureUI()
         configureBindings()
     }
 
     private func configureNavigationBar() {
         title = HomeConstant.Label.title
-        navigationController?.navigationBar.prefersLargeTitles = true
-
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-    }
-
-    private func configureSearchController() {
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = HomeConstant.SearchBar.placeholder
     }
 
     private func configureUI() {
         musicCollectionView.collectionView.dataSource = self
         musicCollectionView.collectionView.delegate = self
 
-        view.addSubview(contentView)
-
-        contentView.addSubview(musicCollectionView)
-
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+        view.addSubview(musicCollectionView)
 
         musicCollectionView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()

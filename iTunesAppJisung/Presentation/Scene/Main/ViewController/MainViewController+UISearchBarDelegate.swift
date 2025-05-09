@@ -1,6 +1,6 @@
 import UIKit
 
-extension HomeViewController: UISearchBarDelegate {
+extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_: UISearchBar) {}
 
     func searchBarCancelButtonClicked(_: UISearchBar) {}

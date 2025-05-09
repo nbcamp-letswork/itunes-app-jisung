@@ -6,7 +6,23 @@ final class AppDIContainer {
     init() {
         container = Container()
 
+        registerMainDependencies()
         registerHomeDependencies()
+    }
+
+    private func registerMainDependencies() {
+        container.register(MainViewController.self) { _ in
+            MainViewController()
+        }
+        .inObjectScope(.container)
+
+        container.register(MainCoordinator.self) { resolver in
+            let mainViewController = resolver.resolve(MainViewController.self)!
+            let homeViewController = resolver.resolve(HomeViewController.self)!
+
+            return MainCoordinator(mainViewController: mainViewController, homeViewController: homeViewController)
+        }
+        .inObjectScope(.container)
     }
 
     private func registerHomeDependencies() {
@@ -38,11 +54,6 @@ final class AppDIContainer {
 
             return HomeViewController(homeViewModel: viewModel)
         }
-
-        container.register(HomeCoordinator.self) { resolver in
-            let viewController = resolver.resolve(HomeViewController.self)!
-
-            return HomeCoordinator(homeViewController: viewController)
-        }
+        .inObjectScope(.container)
     }
 }

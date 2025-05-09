@@ -2,7 +2,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var coordinator: HomeCoordinator?
+    var coordinator: MainCoordinator?
     let appDIContainer = AppDIContainer()
 
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
@@ -11,9 +11,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = UIColor.systemBackground
 
-        let coordinator = appDIContainer.container.resolve(HomeCoordinator.self)!
+        let coordinator = appDIContainer.container.resolve(MainCoordinator.self)!
         coordinator.setRoot(for: window)
-        coordinator.trigger(.home)
+        coordinator.trigger(.main)
 
         window.makeKeyAndVisible()
 

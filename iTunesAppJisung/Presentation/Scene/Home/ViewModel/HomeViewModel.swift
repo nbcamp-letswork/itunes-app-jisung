@@ -6,18 +6,11 @@ final class HomeViewModel {
 
     private let disposeBag = DisposeBag()
 
-    let query = PublishSubject<String>()
-    let searchTrigger: Observable<String>
-    let cancelSearchTrigger = PublishSubject<Void>()
     let musicSections = BehaviorRelay<[MusicSection]>(value: [])
     let selectedMusic = BehaviorRelay<Music?>(value: nil)
 
     init(fetchMusicUseCase: FetchMusicUseCase) {
         self.fetchMusicUseCase = fetchMusicUseCase
-
-        searchTrigger = query
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
 
         fetchAllSeasonsMusic()
     }
