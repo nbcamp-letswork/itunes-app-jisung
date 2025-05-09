@@ -19,7 +19,7 @@ final class MusicSectionHeaderView: UICollectionReusableView, ReuseIdentifier {
         titleLabel.font = .boldSystemFont(ofSize: HomeConstant.Header.titleSize)
 
         subTitleLabel.font = .systemFont(ofSize: HomeConstant.Header.subTitleSize)
-        subTitleLabel.textColor = .lightGray
+        subTitleLabel.textColor = .secondaryLabel
 
         [titleLabel, subTitleLabel]
             .forEach { addSubview($0) }

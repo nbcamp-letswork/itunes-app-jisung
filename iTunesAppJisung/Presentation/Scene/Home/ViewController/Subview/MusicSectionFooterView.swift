@@ -24,7 +24,7 @@ final class MusicSectionFooterView: UICollectionReusableView, ReuseIdentifier {
         titleLabel.font = .boldSystemFont(ofSize: HomeConstant.Footer.titleSize)
 
         artistLabel.font = .systemFont(ofSize: HomeConstant.Footer.artistSize)
-        artistLabel.textColor = .lightGray
+        artistLabel.textColor = .secondaryLabel
 
         let labelStackView = UIStackView()
         labelStackView.axis = .vertical

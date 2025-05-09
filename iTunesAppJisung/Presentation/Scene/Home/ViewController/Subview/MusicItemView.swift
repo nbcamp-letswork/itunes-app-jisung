@@ -26,7 +26,7 @@ final class MusicItemView: UIView {
         titleLabel.font = .boldSystemFont(ofSize: HomeConstant.Regular.titleSize)
         artistLabel.font = .systemFont(ofSize: HomeConstant.Regular.artistSize)
         albumLabel.font = .systemFont(ofSize: HomeConstant.Regular.albumSize)
-        albumLabel.textColor = .lightGray
+        albumLabel.textColor = .secondaryLabel
 
         let labelStackView = UIStackView()
         labelStackView.axis = .vertical
