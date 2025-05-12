@@ -1,5 +1,7 @@
 import XCoordinator
 
 enum MainRoute: Route {
-    case main
+    case main,
+         home,
+         suggestion
 }

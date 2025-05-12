@@ -27,6 +27,7 @@ final class MusicSectionHeaderView: UICollectionReusableView, ReuseIdentifier {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(HomeConstant.Header.titleSize)
         }
 
         subTitleLabel.snp.makeConstraints {

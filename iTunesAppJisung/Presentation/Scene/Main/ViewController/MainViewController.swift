@@ -1,19 +1,39 @@
+import RxSwift
 import UIKit
+import XCoordinator
 
 final class MainViewController: UIViewController {
+    private let suggestionViewController: SuggestionViewController
+
+    var router: UnownedRouter<MainRoute>?
+
+    private let disposeBag = DisposeBag()
+
     var searchController = UISearchController()
     private let contentView = UIView()
+
+    init(suggestionViewController: SuggestionViewController) {
+        self.suggestionViewController = suggestionViewController
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder _: NSCoder) {
+        nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureSearchController()
         configureUI()
+        configureBindings()
     }
 
     private func configureSearchController() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
     }
@@ -25,6 +45,33 @@ final class MainViewController: UIViewController {
 
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+    }
+
+    private func configureBindings() {
+        searchController.searchBar.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(onNext: { [weak self] query in
+                self?.handleSearch(query)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func handleSearch(_ query: String) {
+        if query.isEmpty {
+            if !(children.last is HomeViewController) {
+                router?.trigger(.home)
+            }
+
+            return
+        }
+
+        if !(children.last is SuggestionViewController) {
+            router?.trigger(.suggestion)
+        }
+
+        if let updatable = children.last as? SearchUpdatable {
+            updatable.updateQuery(query)
         }
     }
 
@@ -46,9 +93,5 @@ final class MainViewController: UIViewController {
         child.willMove(toParent: nil)
         child.view.removeFromSuperview()
         child.removeFromParent()
-    }
-
-    func unembedAll() {
-        children.forEach { unembed($0) }
     }
 }
