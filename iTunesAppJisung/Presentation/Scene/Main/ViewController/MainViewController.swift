@@ -3,24 +3,12 @@ import UIKit
 import XCoordinator
 
 final class MainViewController: UIViewController {
-    private let suggestionViewController: SuggestionViewController
-
-    var router: UnownedRouter<MainRoute>?
+    var router: WeakRouter<MainRoute>?
 
     private let disposeBag = DisposeBag()
 
     var searchController = UISearchController()
     private let contentView = UIView()
-
-    init(suggestionViewController: SuggestionViewController) {
-        self.suggestionViewController = suggestionViewController
-
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder _: NSCoder) {
-        nil
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,29 +38,47 @@ final class MainViewController: UIViewController {
 
     private func configureBindings() {
         searchController.searchBar.rx.text.orEmpty
+            .observe(on: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .bind(onNext: { [weak self] query in
-                self?.handleSearch(query)
+                self?.handleSuggestionInput(query)
             })
             .disposed(by: disposeBag)
     }
 
-    private func handleSearch(_ query: String) {
-        if query.isEmpty {
-            if !(children.last is HomeViewController) {
-                router?.trigger(.home)
-            }
+    private func home() {
+        guard !(children.last is HomeViewController) else { return }
+        router?.trigger(.home)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        searchController.searchBar.becomeFirstResponder()
+    }
 
-            return
-        }
-
+    private func suggestion(for query: String) {
         if !(children.last is SuggestionViewController) {
             router?.trigger(.suggestion)
         }
+        updateQuery(query)
+    }
 
+    private func updateQuery(_ query: String) {
         if let updatable = children.last as? SearchUpdatable {
             updatable.updateQuery(query)
         }
+    }
+
+    func handleSuggestionInput(_ query: String) {
+        if query.isEmpty {
+            home()
+        } else {
+            suggestion(for: query)
+        }
+    }
+
+    func handleSuggestionSelection(_ query: String) {
+        searchController.searchBar.text = query
+        updateQuery(query)
+        router?.trigger(.result)
     }
 
     func embed(_ child: UIViewController) {

@@ -1,14 +1,17 @@
 import RxSwift
 import UIKit
+import XCoordinator
 
-final class SuggestionViewController: UIViewController {
+final class ResultViewController: UIViewController {
     let searchViewModel: SearchViewModel
 
-    private let disposeBag = DisposeBag()
+    var router: WeakRouter<ResultRoute>?
 
-    weak var delegate: SuggestionViewControllerDelegate?
+    weak var delegate: ResultViewControllerDelegate?
 
-    private let suggestionTableView = SuggestionTableView()
+    let disposeBag = DisposeBag()
+
+    private let resultCollectionView = ResultCollectionView()
     private let activityIndicator = UIActivityIndicatorView()
 
     init(searchViewModel: SearchViewModel) {
@@ -29,12 +32,15 @@ final class SuggestionViewController: UIViewController {
     }
 
     private func configureUI() {
+        resultCollectionView.collectionView.dataSource = self
+        resultCollectionView.collectionView.delegate = self
+
         activityIndicator.style = .large
 
-        [suggestionTableView, activityIndicator]
+        [resultCollectionView, activityIndicator]
             .forEach { view.addSubview($0) }
 
-        suggestionTableView.snp.makeConstraints {
+        resultCollectionView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -46,21 +52,11 @@ final class SuggestionViewController: UIViewController {
 
     private func configureBindings() {
         searchViewModel.searchSections
-            .map { sections in
-                sections.flatMap { $0.items.map { $0.title } }
-            }
-            .bind(to: suggestionTableView.tableView.rx.items(
-                cellIdentifier: SuggestionCell.identifier,
-                cellType: SuggestionCell.self
-            )) { _, suggestion, cell in
-                cell.updateUI(with: suggestion)
-            }
-            .disposed(by: disposeBag)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self else { return }
 
-        suggestionTableView.tableView.rx
-            .modelSelected(String.self)
-            .bind(onNext: { [weak self] suggestion in
-                self?.delegate?.didSelectSuggestion(suggestion)
+                self.resultCollectionView.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
 
