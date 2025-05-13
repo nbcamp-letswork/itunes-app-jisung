@@ -5,4 +5,6 @@ struct Media {
     let creatorName: String
     let sourceTitle: String?
     let artworkURL: URL
+    let releaseDate: String
+    let genre: String
 }
