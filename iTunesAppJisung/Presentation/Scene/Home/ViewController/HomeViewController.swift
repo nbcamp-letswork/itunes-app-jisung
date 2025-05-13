@@ -62,13 +62,9 @@ final class HomeViewController: UIViewController {
             .compactMap { $0 }
             .observe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] selected in
-                guard let self,
-                      let index = Season.spring.index
-                else {
-                    return
-                }
+                guard let self else { return }
 
-                let footerIndexPath = IndexPath(item: 0, section: index)
+                let footerIndexPath = IndexPath(item: 0, section: Season.spring.index)
 
                 if let footer = self.musicCollectionView.collectionView.supplementaryView(
                     forElementKind: UICollectionView.elementKindSectionFooter,
@@ -80,13 +76,9 @@ final class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
 
         musicCollectionView.onCarouselChanged = { [weak self] itemIndex in
-            guard let self,
-                  let sectionIndex = Season.spring.index
-            else {
-                return
-            }
+            guard let self else { return }
 
-            let section = self.homeViewModel.musicSections.value[sectionIndex]
+            let section = self.homeViewModel.musicSections.value[Season.spring.index]
             let music = section.musics[itemIndex]
 
             homeViewModel.selectMusic(music)
