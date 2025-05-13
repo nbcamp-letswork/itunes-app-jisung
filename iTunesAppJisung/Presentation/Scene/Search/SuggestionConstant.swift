@@ -1,7 +1,7 @@
 import Foundation
 
-enum SearchConstant {
-    enum Suggestion {
+enum SuggestionConstant {
+    enum Cell {
         static let iconName = "magnifyingglass"
         static let fontSize: CGFloat = 16
         static let iconLeadingSpacing = 16

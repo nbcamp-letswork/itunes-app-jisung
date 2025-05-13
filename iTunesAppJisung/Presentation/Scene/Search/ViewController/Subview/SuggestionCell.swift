@@ -17,10 +17,10 @@ final class SuggestionCell: UITableViewCell, ReuseIdentifier {
     }
 
     private func configureUI() {
-        iconImageView.image = UIImage(systemName: SearchConstant.Suggestion.iconName)
+        iconImageView.image = UIImage(systemName: SuggestionConstant.Cell.iconName)
         iconImageView.tintColor = .secondaryLabel
 
-        suggestionLabel.font = .systemFont(ofSize: SearchConstant.Suggestion.fontSize)
+        suggestionLabel.font = .systemFont(ofSize: SuggestionConstant.Cell.fontSize)
 
         separator.backgroundColor = .separator
 
@@ -28,20 +28,20 @@ final class SuggestionCell: UITableViewCell, ReuseIdentifier {
             .forEach { contentView.addSubview($0) }
 
         iconImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(SearchConstant.Suggestion.iconLeadingSpacing)
+            $0.leading.equalToSuperview().offset(SuggestionConstant.Cell.iconLeadingSpacing)
             $0.centerY.equalToSuperview()
-            $0.size.equalTo(SearchConstant.Suggestion.iconSize)
+            $0.size.equalTo(SuggestionConstant.Cell.iconSize)
         }
 
         suggestionLabel.snp.makeConstraints {
-            $0.leading.equalTo(iconImageView.snp.trailing).offset(SearchConstant.Suggestion.labelSpacing)
-            $0.trailing.verticalEdges.equalToSuperview().inset(SearchConstant.Suggestion.labelSpacing)
+            $0.leading.equalTo(iconImageView.snp.trailing).offset(SuggestionConstant.Cell.labelSpacing)
+            $0.trailing.verticalEdges.equalToSuperview().inset(SuggestionConstant.Cell.labelSpacing)
         }
 
         separator.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(SearchConstant.Suggestion.separatorSpacing)
+            $0.horizontalEdges.equalToSuperview().inset(SuggestionConstant.Cell.separatorSpacing)
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(SearchConstant.Suggestion.separatorHeight)
+            $0.height.equalTo(SuggestionConstant.Cell.separatorHeight)
         }
     }
 
