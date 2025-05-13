@@ -21,7 +21,7 @@ final class DefaultMediaRepository: MediaRepository {
                         title: item.trackName,
                         creatorName: item.artistName,
                         sourceTitle: item.collectionName,
-                        artworkURL: item.artworkUrl100
+                        artworkURL: item.highQualityArtworkURL
                     )
                 }
 
