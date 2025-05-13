@@ -1,11 +1,11 @@
-enum Season: CaseIterable {
+enum Season: Int, CaseIterable {
     case spring,
          summer,
          autumn,
          winter
 
-    var index: Int? {
-        Season.allCases.firstIndex(of: self)
+    var index: Int {
+        rawValue
     }
 
     var keyword: String {
