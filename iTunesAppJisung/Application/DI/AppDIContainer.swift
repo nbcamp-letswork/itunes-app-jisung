@@ -33,22 +33,20 @@ final class AppDIContainer {
     }
 
     private func registerPresentationDependencies() {
-        container.register(MainViewController.self) { resolver in
-            let suggestionViewController = resolver.resolve(SuggestionViewController.self)!
-
-            return MainViewController(suggestionViewController: suggestionViewController)
+        container.register(MainViewController.self) { _ in
+            MainViewController()
         }
         .inObjectScope(.container)
 
         container.register(MainCoordinator.self) { resolver in
             let mainViewController = resolver.resolve(MainViewController.self)!
             let homeViewController = resolver.resolve(HomeViewController.self)!
-            let suggestionViewController = resolver.resolve(SuggestionViewController.self)!
+            let searchViewModel = resolver.resolve(SearchViewModel.self)!
 
             return MainCoordinator(
                 mainViewController: mainViewController,
                 homeViewController: homeViewController,
-                suggestionViewController: suggestionViewController
+                searchViewModel: searchViewModel
             )
         }
         .inObjectScope(.container)
@@ -71,13 +69,6 @@ final class AppDIContainer {
             let useCase = resolver.resolve(FetchMediaUseCase.self)!
 
             return SearchViewModel(fetchMediaUseCase: useCase)
-        }
-        .inObjectScope(.container)
-
-        container.register(SuggestionViewController.self) { resolver in
-            let viewModel = resolver.resolve(SearchViewModel.self)!
-
-            return SuggestionViewController(searchViewModel: viewModel)
         }
         .inObjectScope(.container)
     }
