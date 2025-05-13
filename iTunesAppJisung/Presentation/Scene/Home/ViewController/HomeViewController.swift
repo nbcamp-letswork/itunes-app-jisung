@@ -53,7 +53,7 @@ final class HomeViewController: UIViewController {
                 guard let self else { return }
 
                 let seasons = sections.map { $0.season }
-                self.musicCollectionView.updateLayout(using: seasons)
+                self.musicCollectionView.updateUI(using: seasons)
                 self.musicCollectionView.collectionView.reloadData()
             })
             .disposed(by: disposeBag)

@@ -39,7 +39,7 @@ final class MusicCollectionView: UIView {
         }
     }
 
-    func updateLayout(using seasons: [Season]) {
+    func updateUI(using seasons: [Season]) {
         collectionView.collectionViewLayout = createCompositionalLayout(using: seasons)
     }
 }
