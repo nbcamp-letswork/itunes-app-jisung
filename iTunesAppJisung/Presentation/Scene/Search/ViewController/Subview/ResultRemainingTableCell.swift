@@ -35,7 +35,7 @@ final class ResultRemainingTableCell: UITableViewCell, ReuseIdentifier {
         labelStackView.spacing = ResultConstant.Remaining.labelSpacing
 
         [artworkImageView, labelStackView, openButton]
-            .forEach { addSubview($0) }
+            .forEach { contentView.addSubview($0) }
 
         [titleLabel, creatorNameLabel]
             .forEach { labelStackView.addArrangedSubview($0) }
