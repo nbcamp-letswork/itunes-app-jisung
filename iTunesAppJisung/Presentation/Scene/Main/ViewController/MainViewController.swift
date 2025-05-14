@@ -38,8 +38,11 @@ final class MainViewController: UIViewController {
 
     private func configureBindings() {
         searchController.searchBar.rx.text.orEmpty
-            .observe(on: MainScheduler.asyncInstance)
             .distinctUntilChanged()
+            .filter { [weak self] _ in
+                self?.searchController.searchBar.isFirstResponder == true
+            }
+            .observe(on: MainScheduler.asyncInstance)
             .bind(onNext: { [weak self] query in
                 self?.handleSuggestionInput(query)
             })
@@ -76,7 +79,9 @@ final class MainViewController: UIViewController {
     }
 
     func handleSuggestionSelection(_ query: String) {
+        searchController.searchBar.resignFirstResponder()
         searchController.searchBar.text = query
+        searchController.searchBar.searchTextField.sendActions(for: .editingChanged)
         updateQuery(query)
         router?.trigger(.result)
     }
