@@ -42,7 +42,7 @@ final class MainViewController: UIViewController {
             .filter { [weak self] _ in
                 self?.searchController.searchBar.isFirstResponder == true
             }
-            .observe(on: MainScheduler.asyncInstance)
+            .observe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] query in
                 self?.handleSuggestionInput(query)
             })
