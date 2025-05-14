@@ -16,6 +16,16 @@ final class AppDIContainer {
             FetchMediaDataSource()
         }
 
+        container.register(RSSFeedParser.self) { _ in
+            RSSFeedParser()
+        }
+
+        container.register(FeedURLRepository.self) { resolver in
+            let parser = resolver.resolve(RSSFeedParser.self)!
+
+            return DefaultFeedURLRepository(rssFeedParser: parser)
+        }
+
         container.register(MediaRepository.self) { resolver in
             let dataSource = resolver.resolve(FetchMediaDataSource.self)!
 
