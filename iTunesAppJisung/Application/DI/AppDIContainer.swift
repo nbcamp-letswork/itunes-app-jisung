@@ -40,6 +40,13 @@ final class AppDIContainer {
             return DefaultFetchMediaUseCase(mediaRepository: mediaRepository)
         }
         .inObjectScope(.container)
+
+        container.register(ParseFeedURLUseCase.self) { resolver in
+            let feedURLRepository = resolver.resolve(FeedURLRepository.self)!
+
+            return DefaultParseFeedURLUseCase(feedURLRepository: feedURLRepository)
+        }
+        .inObjectScope(.container)
     }
 
     private func registerPresentationDependencies() {
