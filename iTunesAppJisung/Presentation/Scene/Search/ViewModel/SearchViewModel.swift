@@ -41,7 +41,7 @@ final class SearchViewModel {
         let movie = fetchMediaObservable(for: keyword, type: .movie)
         let podcast = fetchMediaObservable(for: keyword, type: .podcast)
 
-        return Observable.zip(movie, podcast)
+        return Observable.combineLatest(movie, podcast)
             .map { movieItems, podcastItems in
                 var sections: [SearchSection] = []
 
