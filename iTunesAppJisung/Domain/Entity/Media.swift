@@ -7,4 +7,6 @@ struct Media {
     let artworkURL: URL
     let releaseDate: String
     let genre: String
+    let feedURL: String?
+    var previewURL: URL?
 }

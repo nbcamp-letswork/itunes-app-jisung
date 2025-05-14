@@ -23,7 +23,9 @@ final class DefaultMediaRepository: MediaRepository {
                         sourceTitle: item.collectionName,
                         artworkURL: item.highQualityArtworkURL,
                         releaseDate: item.formattedReleaseDate,
-                        genre: item.primaryGenreName
+                        genre: item.primaryGenreName,
+                        feedURL: item.feedUrl,
+                        previewURL: item.previewUrl
                     )
                 }
 

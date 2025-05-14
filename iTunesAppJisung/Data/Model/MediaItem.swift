@@ -7,6 +7,8 @@ struct MediaItem: Decodable {
     let artworkUrl100: URL
     let releaseDate: String
     let primaryGenreName: String
+    let feedUrl: String?
+    let previewUrl: URL?
 
     var highQualityArtworkURL: URL {
         let highResString = artworkUrl100.absoluteString.replacingOccurrences(of: "100x100", with: "600x600")
