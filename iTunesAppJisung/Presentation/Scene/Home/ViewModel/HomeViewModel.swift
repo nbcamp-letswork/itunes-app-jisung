@@ -17,7 +17,7 @@ final class HomeViewModel {
 
     private func fetchAllSeasonsMusic() {
         Observable.from(Season.allCases)
-            .flatMap { [weak self] season -> Observable<MusicSection?> in
+            .concatMap { [weak self] season -> Observable<MusicSection?> in
                 guard let self else { return .just(nil) }
 
                 return self.fetchMusicObservable(for: season)
