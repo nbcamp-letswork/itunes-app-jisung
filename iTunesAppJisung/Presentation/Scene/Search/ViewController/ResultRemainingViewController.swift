@@ -2,12 +2,13 @@ import UIKit
 
 final class ResultRemainingViewController: UIViewController {
     private let resultRemainingTableView = ResultRemainingTableView()
-    private let closeButton = UIButton()
+    private let closeButton = CloseButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
+        configureBindings()
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -16,15 +17,6 @@ final class ResultRemainingViewController: UIViewController {
 
     private func configureUI() {
         resultRemainingTableView.shouldTap = { false }
-
-        guard let xmarkImage = UIImage(systemName: "xmark") else { return }
-        let configuration = UIImage.SymbolConfiguration(weight: .heavy)
-        closeButton.setImage(xmarkImage.withConfiguration(configuration), for: .normal)
-        closeButton.tintColor = .tertiarySystemBackground
-        closeButton.backgroundColor = .secondaryLabel
-        closeButton.layer.cornerRadius = 18
-        closeButton.layer.masksToBounds = true
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
 
         [resultRemainingTableView, closeButton]
             .forEach { view.addSubview($0) }
@@ -39,9 +31,10 @@ final class ResultRemainingViewController: UIViewController {
         }
     }
 
-    @objc
-    private func closeButtonTapped() {
-        dismiss(animated: true, completion: nil)
+    private func configureBindings() {
+        closeButton.onButtonTapped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
     }
 
     func updateUI(
