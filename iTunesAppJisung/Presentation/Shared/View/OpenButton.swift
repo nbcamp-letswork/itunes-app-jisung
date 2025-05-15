@@ -1,6 +1,8 @@
 import UIKit
 
 final class OpenButton: UIButton {
+    var onButtonTapped: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -24,5 +26,7 @@ final class OpenButton: UIButton {
     }
 
     @objc
-    private func didButtonTapped() {}
+    private func didButtonTapped() {
+        onButtonTapped?()
+    }
 }

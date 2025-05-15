@@ -9,5 +9,9 @@ extension HomeViewController: UICollectionViewDelegate {
         indexPath.section == 0
     }
 
-    func collectionView(_: UICollectionView, didSelectItemAt _: IndexPath) {}
+    func collectionView(_: UICollectionView, didSelectItemAt _: IndexPath) {
+        guard let media = homeViewModel.selectedMusic.value else { return }
+
+        router?.trigger(.detail(media: media))
+    }
 }
