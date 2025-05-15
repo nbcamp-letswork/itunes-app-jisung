@@ -2,9 +2,13 @@ import UIKit
 
 extension ResultViewController: UICollectionViewDelegate {
     func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.section {
+        let section = indexPath.section
+
+        switch section {
         case 0, 1:
-            break
+            guard let media = searchViewModel.searchSections.value[section].items.first else { return }
+
+            router?.trigger(.detail(media: media))
         default:
             let section = searchViewModel.searchSections.value[indexPath.section]
 

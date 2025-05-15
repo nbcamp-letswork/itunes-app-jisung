@@ -13,6 +13,7 @@ final class DetailViewController: UIViewController {
     private let releaseDateLabel = UILabel()
     var player: AVPlayer?
     private let avPlayerViewController = AVPlayerViewController()
+    private let emptyMediaView = UIImageView()
     private let closeButton = CloseButton()
 
     override func viewDidLoad() {
@@ -23,7 +24,15 @@ final class DetailViewController: UIViewController {
         configureBindings()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        scrollView.setContentOffset(.zero, animated: false)
+    }
+
     private func configureUI() {
+        view.backgroundColor = .systemBackground
+
         imageView.contentMode = .scaleAspectFit
 
         titleLabel.font = .boldSystemFont(ofSize: DetailConstant.Title.fontSize)
@@ -49,13 +58,24 @@ final class DetailViewController: UIViewController {
         avPlayerViewController.didMove(toParent: self)
         avPlayerViewController.view.backgroundColor = .clear
 
+        emptyMediaView.image = UIImage(systemName: "video.slash")
+        emptyMediaView.contentMode = .scaleAspectFit
+        emptyMediaView.tintColor = .secondaryLabel
+
         [scrollView, closeButton]
             .forEach { view.addSubview($0) }
 
         scrollView.addSubview(contentView)
 
-        [imageView, titleLabel, creatorNameLabel, infoStackView, avPlayerViewController.view]
-            .forEach { contentView.addSubview($0) }
+        [
+            imageView,
+            titleLabel,
+            creatorNameLabel,
+            infoStackView,
+            avPlayerViewController.view,
+            emptyMediaView,
+        ]
+        .forEach { contentView.addSubview($0) }
 
         [genreLabel, releaseDateLabel]
             .forEach { infoStackView.addArrangedSubview($0) }
@@ -101,17 +121,30 @@ final class DetailViewController: UIViewController {
             $0.bottom.equalToSuperview().inset(DetailConstant.AVPlayer.bottomSpacing)
             $0.height.equalTo(avPlayerViewController.view.snp.width).multipliedBy(DetailConstant.AVPlayer.ratio)
         }
+
+        emptyMediaView.snp.makeConstraints {
+            $0.edges.equalTo(avPlayerViewController.view)
+        }
     }
 
     private func configureBindings() {
         closeButton.onButtonTapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            guard let self else { return }
+
+            self.player?.pause()
+            self.player = nil
+            avPlayerViewController.player = nil
+            self.dismiss(animated: true, completion: nil)
         }
     }
 
     func updateUI(media: Media) {
-        imageView.kf.setImage(with: media.artworkURL) { result in
-            guard case let .success(value) = result else { return }
+        imageView.kf.setImage(with: media.artworkURL) { [weak self] result in
+            guard let self,
+                  case let .success(value) = result
+            else {
+                return
+            }
 
             let image = value.image
             let ratio = image.size.height / image.size.width
@@ -126,11 +159,17 @@ final class DetailViewController: UIViewController {
         releaseDateLabel.text = media.releaseDate
 
         if let url = media.previewURL {
+            avPlayerViewController.view.isHidden = false
+            emptyMediaView.isHidden = true
+
             player = AVPlayer(url: url)
 
             avPlayerViewController.player = player
 
             player?.play()
+        } else {
+            avPlayerViewController.view.isHidden = true
+            emptyMediaView.isHidden = false
         }
     }
 }

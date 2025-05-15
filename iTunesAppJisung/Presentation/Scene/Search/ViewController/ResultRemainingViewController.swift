@@ -1,6 +1,9 @@
 import UIKit
+import XCoordinator
 
 final class ResultRemainingViewController: UIViewController {
+    var router: WeakRouter<ResultRemainingRoute>?
+
     private let resultRemainingTableView = ResultRemainingTableView()
     private let closeButton = CloseButton()
 
@@ -45,5 +48,9 @@ final class ResultRemainingViewController: UIViewController {
         resultRemainingTableView.numberOfItems = numberOfItems
         resultRemainingTableView.itemProvider = itemProvider
         resultRemainingTableView.updateUI(title: title, isScrollEnabled: true)
+
+        resultRemainingTableView.onButtonTapped = { [weak self] media in
+            self?.router?.trigger(.detail(media: media))
+        }
     }
 }

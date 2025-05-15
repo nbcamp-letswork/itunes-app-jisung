@@ -7,7 +7,7 @@ final class MusicItemView: UIView {
     private let titleLabel = UILabel()
     private let artistLabel = UILabel()
     private let albumLabel = UILabel()
-    let openButton = OpenButton()
+    private let openButton = OpenButton()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

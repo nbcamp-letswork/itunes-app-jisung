@@ -10,8 +10,6 @@ final class MainCoordinator: NavigationCoordinator<MainRoute> {
     init(container: Swinject.Container) {
         self.container = container
         mainViewController = container.resolve(MainViewController.self)!
-//        homeCoordinator = HomeCoordinator(rootViewController: container.resolve(HomeViewController.self)!)
-//        resultCoordinator = ResultCoordinator(rootViewController: container.resolve(ResultViewController.self)!)
 
         super.init(initialRoute: .main)
     }

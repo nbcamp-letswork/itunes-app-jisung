@@ -3,6 +3,7 @@ import XCoordinator
 
 final class ResultCoordinator: ViewCoordinator<ResultRoute> {
     private let container: Swinject.Container
+    private var resultRemainingCoordinator: ResultRemainingCoordinator!
 
     init(
         rootViewController: ResultViewController,
@@ -26,6 +27,12 @@ final class ResultCoordinator: ViewCoordinator<ResultRoute> {
                 numberOfItems: numberOfItems,
                 itemProvider: itemProvider
             )
+
+            resultRemainingCoordinator = ResultRemainingCoordinator(
+                rootViewController: resultRemainingViewController,
+                container: container
+            )
+
             return .present(resultRemainingViewController)
 
         case let .detail(media):

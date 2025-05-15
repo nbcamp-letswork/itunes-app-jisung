@@ -3,6 +3,8 @@ import SnapKit
 import UIKit
 
 final class ResultRemainingTableCell: UITableViewCell, ReuseIdentifier {
+    var onButtonTapped: (() -> Void)?
+
     private let artworkImageView = UIImageView()
     private let titleLabel = UILabel()
     private let creatorNameLabel = UILabel()
@@ -60,9 +62,10 @@ final class ResultRemainingTableCell: UITableViewCell, ReuseIdentifier {
         }
     }
 
-    func updateUI(with media: Media) {
+    func updateUI(with media: Media, onButtonTapped: @escaping () -> Void) {
         artworkImageView.kf.setImage(with: media.artworkURL)
         titleLabel.text = media.title
         creatorNameLabel.text = media.creatorName
+        openButton.onButtonTapped = onButtonTapped
     }
 }

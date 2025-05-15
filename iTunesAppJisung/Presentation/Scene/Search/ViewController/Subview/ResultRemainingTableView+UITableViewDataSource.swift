@@ -15,7 +15,9 @@ extension ResultRemainingTableView: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.updateUI(with: item)
+        cell.updateUI(with: item) { [weak self] in
+            self?.onButtonTapped?(item)
+        }
 
         return cell
     }
