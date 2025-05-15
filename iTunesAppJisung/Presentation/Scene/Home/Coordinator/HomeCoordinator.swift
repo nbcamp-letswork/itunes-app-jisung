@@ -1,26 +1,27 @@
+import Swinject
 import XCoordinator
 
 final class HomeCoordinator: ViewCoordinator<HomeRoute> {
-    private let detailViewController: DetailViewController
+    private let container: Swinject.Container
 
     init(
-        mainViewController: MainViewController,
-        homeViewController: HomeViewController,
-        detailViewController: DetailViewController
+        rootViewController: HomeViewController,
+        delegate: MainViewController,
+        container: Swinject.Container
     ) {
-        self.detailViewController = detailViewController
+        self.container = container
 
-        super.init(rootViewController: homeViewController)
+        super.init(rootViewController: rootViewController)
 
-        homeViewController.delegate = mainViewController
-        homeViewController.router = weakRouter
+        rootViewController.delegate = delegate
+        rootViewController.router = weakRouter
     }
 
     override func prepareTransition(for route: HomeRoute) -> ViewTransition {
         switch route {
         case let .detail(media):
+            let detailViewController = container.resolve(DetailViewController.self)!
             detailViewController.modalPresentationStyle = .fullScreen
-
             detailViewController.updateUI(media: media)
 
             return .present(detailViewController)

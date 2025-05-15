@@ -1,19 +1,17 @@
+import Swinject
 import XCoordinator
 
 final class MainCoordinator: NavigationCoordinator<MainRoute> {
+    private let container: Swinject.Container
     private let mainViewController: MainViewController
-    private let homeViewController: HomeViewController
-    private let searchViewModel: SearchViewModel
-    private var resultCoordinator: ResultCoordinator?
+    private var homeCoordinator: HomeCoordinator!
+    private var resultCoordinator: ResultCoordinator!
 
-    init(
-        mainViewController: MainViewController,
-        homeViewController: HomeViewController,
-        searchViewModel: SearchViewModel
-    ) {
-        self.mainViewController = mainViewController
-        self.homeViewController = homeViewController
-        self.searchViewModel = searchViewModel
+    init(container: Swinject.Container) {
+        self.container = container
+        mainViewController = container.resolve(MainViewController.self)!
+//        homeCoordinator = HomeCoordinator(rootViewController: container.resolve(HomeViewController.self)!)
+//        resultCoordinator = ResultCoordinator(rootViewController: container.resolve(ResultViewController.self)!)
 
         super.init(initialRoute: .main)
     }
@@ -21,46 +19,51 @@ final class MainCoordinator: NavigationCoordinator<MainRoute> {
     override func prepareTransition(for route: MainRoute) -> NavigationTransition {
         switch route {
         case .main:
-            homeViewController.delegate = mainViewController
-
             mainViewController.router = weakRouter
-            mainViewController.embed(homeViewController)
 
             return .set([mainViewController])
+
         case .home:
             unembed()
 
-            mainViewController.embed(homeViewController)
+            let homeViewController = container.resolve(HomeViewController.self)!
+            homeCoordinator = HomeCoordinator(
+                rootViewController: homeViewController,
+                delegate: mainViewController,
+                container: container
+            )
+
+            mainViewController.embed(homeCoordinator.rootViewController)
 
             return .none()
+
         case .suggestion:
             unembed()
 
-            let suggestionViewController = SuggestionViewController(searchViewModel: searchViewModel)
+            let suggestionViewController = container.resolve(SuggestionViewController.self)!
             suggestionViewController.delegate = mainViewController
 
             mainViewController.embed(suggestionViewController)
-
             return .none()
+
         case .result:
             unembed()
 
-            let resultViewController = ResultViewController(searchViewModel: searchViewModel)
-            resultViewController.delegate = mainViewController
+            let resultViewController = container.resolve(ResultViewController.self)!
+            resultCoordinator = ResultCoordinator(
+                rootViewController: resultViewController,
+                delegate: mainViewController,
+                container: container
+            )
 
-            resultCoordinator = ResultCoordinator(rootViewController: resultViewController)
-            resultViewController.router = resultCoordinator?.weakRouter
-
-            mainViewController.embed(resultViewController)
+            mainViewController.embed(resultCoordinator.rootViewController)
 
             return .none()
         }
     }
 
     private func unembed() {
-        guard let child = mainViewController.children.last else {
-            return
-        }
+        guard let child = mainViewController.children.last else { return }
 
         mainViewController.unembed(child)
     }

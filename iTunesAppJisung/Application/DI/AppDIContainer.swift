@@ -11,6 +11,10 @@ final class AppDIContainer {
         registerPresentationDependencies()
     }
 
+    func makeMainCoordinator() -> MainCoordinator {
+        MainCoordinator(container: container)
+    }
+
     private func registerDataDependencies() {
         container.register(FetchMediaDataSource.self) { _ in
             FetchMediaDataSource()
@@ -39,46 +43,19 @@ final class AppDIContainer {
 
             return DefaultFetchMediaUseCase(mediaRepository: mediaRepository)
         }
-        .inObjectScope(.container)
 
         container.register(ParseFeedURLUseCase.self) { resolver in
             let feedURLRepository = resolver.resolve(FeedURLRepository.self)!
 
             return DefaultParseFeedURLUseCase(feedURLRepository: feedURLRepository)
         }
-        .inObjectScope(.container)
     }
 
     private func registerPresentationDependencies() {
-        container.register(MainViewController.self) { _ in
-            MainViewController()
-        }
-        .inObjectScope(.container)
-
-        container.register(MainCoordinator.self) { resolver in
-            let mainViewController = resolver.resolve(MainViewController.self)!
-            let homeViewController = resolver.resolve(HomeViewController.self)!
-            let searchViewModel = resolver.resolve(SearchViewModel.self)!
-
-            return MainCoordinator(
-                mainViewController: mainViewController,
-                homeViewController: homeViewController,
-                searchViewModel: searchViewModel
-            )
-        }
-        .inObjectScope(.container)
-
         container.register(HomeViewModel.self) { resolver in
             let useCase = resolver.resolve(FetchMediaUseCase.self)!
 
             return HomeViewModel(fetchMediaUseCase: useCase)
-        }
-        .inObjectScope(.container)
-
-        container.register(HomeViewController.self) { resolver in
-            let viewModel = resolver.resolve(HomeViewModel.self)!
-
-            return HomeViewController(homeViewModel: viewModel)
         }
         .inObjectScope(.container)
 
@@ -88,5 +65,35 @@ final class AppDIContainer {
             return SearchViewModel(fetchMediaUseCase: useCase)
         }
         .inObjectScope(.container)
+
+        container.register(MainViewController.self) { _ in
+            MainViewController()
+        }
+
+        container.register(HomeViewController.self) { resolver in
+            let viewModel = resolver.resolve(HomeViewModel.self)!
+
+            return HomeViewController(homeViewModel: viewModel)
+        }
+
+        container.register(SuggestionViewController.self) { resolver in
+            let viewModel = resolver.resolve(SearchViewModel.self)!
+
+            return SuggestionViewController(searchViewModel: viewModel)
+        }
+
+        container.register(ResultViewController.self) { resolver in
+            let viewModel = resolver.resolve(SearchViewModel.self)!
+
+            return ResultViewController(searchViewModel: viewModel)
+        }
+
+        container.register(ResultRemainingViewController.self) { _ in
+            ResultRemainingViewController()
+        }
+
+        container.register(DetailViewController.self) { _ in
+            DetailViewController()
+        }
     }
 }
