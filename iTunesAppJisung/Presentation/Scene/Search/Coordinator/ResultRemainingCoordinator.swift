@@ -18,9 +18,8 @@ final class ResultRemainingCoordinator: ViewCoordinator<ResultRemainingRoute> {
     override func prepareTransition(for route: ResultRemainingRoute) -> ViewTransition {
         switch route {
         case let .detail(media):
-            let detailViewController = container.resolve(DetailViewController.self)!
+            let detailViewController = container.resolve(DetailViewController.self, argument: media)!
             detailViewController.modalPresentationStyle = .fullScreen
-            detailViewController.updateUI(media: media)
 
             return .present(detailViewController)
         }

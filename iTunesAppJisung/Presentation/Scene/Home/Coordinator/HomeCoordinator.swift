@@ -20,9 +20,8 @@ final class HomeCoordinator: ViewCoordinator<HomeRoute> {
     override func prepareTransition(for route: HomeRoute) -> ViewTransition {
         switch route {
         case let .detail(media):
-            let detailViewController = container.resolve(DetailViewController.self)!
+            let detailViewController = container.resolve(DetailViewController.self, argument: media)!
             detailViewController.modalPresentationStyle = .fullScreen
-            detailViewController.updateUI(media: media)
 
             return .present(detailViewController)
         }

@@ -36,9 +36,8 @@ final class ResultCoordinator: ViewCoordinator<ResultRoute> {
             return .present(resultRemainingViewController)
 
         case let .detail(media):
-            let detailViewController = container.resolve(DetailViewController.self)!
+            let detailViewController = container.resolve(DetailViewController.self, argument: media)!
             detailViewController.modalPresentationStyle = .fullScreen
-            detailViewController.updateUI(media: media)
 
             return .present(detailViewController)
         }

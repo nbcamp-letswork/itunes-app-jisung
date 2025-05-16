@@ -1,8 +1,13 @@
 import AVKit
+import RxSwift
 import SnapKit
 import UIKit
 
 final class DetailViewController: UIViewController {
+    private let detailViewModel: DetailViewModel
+
+    private let disposeBag = DisposeBag()
+
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let imageView = UIImageView()
@@ -11,10 +16,20 @@ final class DetailViewController: UIViewController {
     private let genreLabel = UILabel()
     private let infoStackView = UIStackView()
     private let releaseDateLabel = UILabel()
-    var player: AVPlayer?
+    private var player: AVPlayer?
     private let avPlayerViewController = AVPlayerViewController()
     private let emptyMediaView = UIImageView()
     private let closeButton = CloseButton()
+
+    init(detailViewModel: DetailViewModel) {
+        self.detailViewModel = detailViewModel
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder _: NSCoder) {
+        nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +76,7 @@ final class DetailViewController: UIViewController {
         emptyMediaView.image = UIImage(systemName: "video.slash")
         emptyMediaView.contentMode = .scaleAspectFit
         emptyMediaView.tintColor = .secondaryLabel
+        emptyMediaView.isHidden = true
 
         [scrollView, closeButton]
             .forEach { view.addSubview($0) }
@@ -94,10 +110,6 @@ final class DetailViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-        }
-
-        imageView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalToSuperview()
         }
 
         titleLabel.snp.makeConstraints {
@@ -136,9 +148,16 @@ final class DetailViewController: UIViewController {
             avPlayerViewController.player = nil
             self.dismiss(animated: true, completion: nil)
         }
+
+        detailViewModel.media
+            .asDriver()
+            .drive(onNext: { [weak self] media in
+                self?.updateUI(media: media)
+            })
+            .disposed(by: disposeBag)
     }
 
-    func updateUI(media: Media) {
+    private func updateUI(media: Media) {
         imageView.kf.setImage(with: media.artworkURL) { [weak self] result in
             guard let self,
                   case let .success(value) = result
@@ -149,7 +168,8 @@ final class DetailViewController: UIViewController {
             let image = value.image
             let ratio = image.size.height / image.size.width
 
-            self.imageView.snp.updateConstraints {
+            self.imageView.snp.makeConstraints {
+                $0.top.horizontalEdges.equalToSuperview()
                 $0.height.equalTo(self.imageView.snp.width).multipliedBy(ratio)
             }
         }
@@ -158,18 +178,15 @@ final class DetailViewController: UIViewController {
         genreLabel.text = media.genre
         releaseDateLabel.text = media.releaseDate
 
-        if let url = media.previewURL {
-            avPlayerViewController.view.isHidden = false
-            emptyMediaView.isHidden = true
+        guard let url = media.previewURL else { return }
 
-            player = AVPlayer(url: url)
+        avPlayerViewController.view.isHidden = false
+        emptyMediaView.isHidden = true
 
-            avPlayerViewController.player = player
+        player = AVPlayer(url: url)
 
-            player?.play()
-        } else {
-            avPlayerViewController.view.isHidden = true
-            emptyMediaView.isHidden = false
-        }
+        avPlayerViewController.player = player
+
+        player?.play()
     }
 }

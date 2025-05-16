@@ -66,6 +66,12 @@ final class AppDIContainer {
         }
         .inObjectScope(.container)
 
+        container.register(DetailViewModel.self) { (resolver, media: Media) in
+            let useCase = resolver.resolve(ParseFeedURLUseCase.self)!
+
+            return DetailViewModel(media: media, parseFeedURLUseCase: useCase)
+        }
+
         container.register(MainViewController.self) { _ in
             MainViewController()
         }
@@ -92,8 +98,10 @@ final class AppDIContainer {
             ResultRemainingViewController()
         }
 
-        container.register(DetailViewController.self) { _ in
-            DetailViewController()
+        container.register(DetailViewController.self) { (resolver, media: Media) in
+            let viewModel = resolver.resolve(DetailViewModel.self, argument: media)!
+
+            return DetailViewController(detailViewModel: viewModel)
         }
     }
 }
