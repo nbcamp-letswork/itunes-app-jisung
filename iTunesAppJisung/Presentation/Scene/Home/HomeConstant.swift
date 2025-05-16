@@ -82,4 +82,10 @@ enum HomeConstant {
         static let bottomInset: CGFloat = 30
         static let trailingInset: CGFloat = 16
     }
+
+    enum OpenButton {
+        static let horizontalSpacing = 12
+        static let width = 80
+        static let height = 32
+    }
 }

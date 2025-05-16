@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = UIColor.systemBackground
 
-        let coordinator = appDIContainer.container.resolve(MainCoordinator.self)!
+        let coordinator = appDIContainer.makeMainCoordinator()
         coordinator.setRoot(for: window)
 
         window.makeKeyAndVisible()

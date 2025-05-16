@@ -56,7 +56,9 @@ extension HomeViewController: UICollectionViewDataSource {
             let endIndex = min(startIndex + 3, musics.count)
             let musics = Array(musics[startIndex ..< endIndex])
 
-            cell.updateUI(with: musics)
+            cell.updateUI(with: musics) { [weak self] media in
+                self?.router?.trigger(.detail(media: media))
+            }
 
             return cell
         }

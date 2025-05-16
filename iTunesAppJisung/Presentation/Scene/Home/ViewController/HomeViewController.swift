@@ -2,9 +2,12 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
+import XCoordinator
 
 final class HomeViewController: UIViewController {
     let homeViewModel: HomeViewModel
+
+    var router: WeakRouter<HomeRoute>?
 
     weak var delegate: HomeViewControllerDelegate?
 

@@ -64,7 +64,10 @@ extension ResultViewController: UICollectionViewDataSource {
             cell.updateUI(
                 title: type.remainingTitle,
                 numberOfItems: { section.items.count },
-                itemProvider: { section.items[$0] }
+                itemProvider: { section.items[$0] },
+                onButtonTapped: { [weak self] media in
+                    self?.router?.trigger(.detail(media: media))
+                }
             )
 
             return cell

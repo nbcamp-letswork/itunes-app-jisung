@@ -7,6 +7,7 @@ final class MusicItemView: UIView {
     private let titleLabel = UILabel()
     private let artistLabel = UILabel()
     private let albumLabel = UILabel()
+    private let openButton = OpenButton()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,7 +33,7 @@ final class MusicItemView: UIView {
         labelStackView.axis = .vertical
         labelStackView.spacing = HomeConstant.Regular.stackViewSpacing
 
-        [artworkImageView, labelStackView]
+        [artworkImageView, labelStackView, openButton]
             .forEach { addSubview($0) }
 
         [titleLabel, artistLabel, albumLabel]
@@ -46,15 +47,26 @@ final class MusicItemView: UIView {
 
         labelStackView.snp.makeConstraints {
             $0.leading.equalTo(artworkImageView.snp.trailing).offset(HomeConstant.Regular.imageAndLabelSpacing)
-            $0.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
+        }
+
+        openButton.snp.makeConstraints {
+            $0.leading.equalTo(labelStackView.snp.trailing).offset(HomeConstant.OpenButton.horizontalSpacing)
+            $0.trailing.equalToSuperview().offset(HomeConstant.OpenButton.horizontalSpacing)
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(HomeConstant.OpenButton.width)
+            $0.height.equalTo(HomeConstant.OpenButton.height)
         }
     }
 
-    func updateUI(with music: Media) {
+    func updateUI(with music: Media, onButtonTapped: @escaping ((Media) -> Void)) {
         titleLabel.text = music.title
         artistLabel.text = music.creatorName
         albumLabel.text = music.sourceTitle
         artworkImageView.kf.setImage(with: music.artworkURL)
+
+        openButton.onButtonTapped = {
+            onButtonTapped(music)
+        }
     }
 }
