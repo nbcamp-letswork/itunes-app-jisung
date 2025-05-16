@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let coordinator = appDIContainer.container.resolve(MainCoordinator.self)!
         coordinator.setRoot(for: window)
-        coordinator.trigger(.main)
 
         window.makeKeyAndVisible()
 

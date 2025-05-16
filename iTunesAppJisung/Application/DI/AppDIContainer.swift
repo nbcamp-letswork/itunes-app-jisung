@@ -29,6 +29,7 @@ final class AppDIContainer {
 
             return DefaultFetchMediaUseCase(mediaRepository: mediaRepository)
         }
+        .inObjectScope(.container)
     }
 
     private func registerPresentationDependencies() {
@@ -40,8 +41,13 @@ final class AppDIContainer {
         container.register(MainCoordinator.self) { resolver in
             let mainViewController = resolver.resolve(MainViewController.self)!
             let homeViewController = resolver.resolve(HomeViewController.self)!
+            let searchViewModel = resolver.resolve(SearchViewModel.self)!
 
-            return MainCoordinator(mainViewController: mainViewController, homeViewController: homeViewController)
+            return MainCoordinator(
+                mainViewController: mainViewController,
+                homeViewController: homeViewController,
+                searchViewModel: searchViewModel
+            )
         }
         .inObjectScope(.container)
 
@@ -56,6 +62,13 @@ final class AppDIContainer {
             let viewModel = resolver.resolve(HomeViewModel.self)!
 
             return HomeViewController(homeViewModel: viewModel)
+        }
+        .inObjectScope(.container)
+
+        container.register(SearchViewModel.self) { resolver in
+            let useCase = resolver.resolve(FetchMediaUseCase.self)!
+
+            return SearchViewModel(fetchMediaUseCase: useCase)
         }
         .inObjectScope(.container)
     }
