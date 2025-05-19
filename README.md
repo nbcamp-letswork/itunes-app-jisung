@@ -126,8 +126,6 @@ iTunesAppJisung/
     └── LaunchScreen.storyboard
 ```
 
-# ㅁㅁ
-
 ## 재사용성 (Reusability)
 상세 화면으로 진입하기 위한 `OpenButton`과 모달을 닫기 위한 `CloseButton`을 `Shared`로 분리하여 여러 화면에서 재사용
 
