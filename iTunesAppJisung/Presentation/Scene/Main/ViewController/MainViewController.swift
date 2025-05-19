@@ -13,6 +13,8 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        router?.trigger(.home)
+
         configureSearchController()
         configureUI()
         configureBindings()

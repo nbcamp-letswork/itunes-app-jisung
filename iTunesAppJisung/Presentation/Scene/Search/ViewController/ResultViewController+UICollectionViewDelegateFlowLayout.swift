@@ -47,16 +47,4 @@ extension ResultViewController: UICollectionViewDelegateFlowLayout {
     ) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 32, right: 0)
     }
-
-    func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard indexPath.section > 1 else { return }
-
-        let section = searchViewModel.searchSections.value[indexPath.section]
-
-        router?.trigger(.remaining(
-            title: section.type.remainingTitle,
-            numberOfItems: { section.items.count },
-            itemProvider: { section.items[$0] }
-        ))
-    }
 }

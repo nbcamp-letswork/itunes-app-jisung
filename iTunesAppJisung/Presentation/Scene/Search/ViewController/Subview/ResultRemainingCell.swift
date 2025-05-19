@@ -24,9 +24,15 @@ final class ResultRemainingCell: UICollectionViewCell, ReuseIdentifier {
         }
     }
 
-    func updateUI(title: String, numberOfItems: @escaping () -> Int, itemProvider: @escaping (Int) -> Media) {
+    func updateUI(
+        title: String,
+        numberOfItems: @escaping () -> Int,
+        itemProvider: @escaping (Int) -> Media,
+        onButtonTapped: @escaping (Media) -> Void
+    ) {
         resultRemainingTableView.numberOfItems = numberOfItems
         resultRemainingTableView.itemProvider = itemProvider
+        resultRemainingTableView.onButtonTapped = onButtonTapped
         resultRemainingTableView.updateUI(title: title, isScrollEnabled: false)
     }
 }

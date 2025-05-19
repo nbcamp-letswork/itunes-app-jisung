@@ -6,6 +6,7 @@ final class ResultRemainingTableView: UIView {
     var itemProvider: ((Int) -> Media)?
     var numberOfItems: (() -> Int)?
     var shouldTap: (() -> Bool)?
+    var onButtonTapped: ((Media) -> Void)?
 
     private let headerView = UIView()
     private let titleLabel = UILabel()
