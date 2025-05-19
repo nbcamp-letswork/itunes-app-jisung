@@ -1,5 +1,5 @@
 import XCoordinator
 
-enum HomeRoute: Route {
+enum ResultRemainingRoute: Route {
     case detail(media: Media)
 }

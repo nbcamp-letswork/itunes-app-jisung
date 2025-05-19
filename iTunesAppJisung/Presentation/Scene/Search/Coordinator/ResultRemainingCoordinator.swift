@@ -1,23 +1,21 @@
 import Swinject
 import XCoordinator
 
-final class HomeCoordinator: ViewCoordinator<HomeRoute> {
+final class ResultRemainingCoordinator: ViewCoordinator<ResultRemainingRoute> {
     private let container: Swinject.Container
 
     init(
-        rootViewController: HomeViewController,
-        delegate: MainViewController,
+        rootViewController: ResultRemainingViewController,
         container: Swinject.Container
     ) {
         self.container = container
 
         super.init(rootViewController: rootViewController)
 
-        rootViewController.delegate = delegate
         rootViewController.router = weakRouter
     }
 
-    override func prepareTransition(for route: HomeRoute) -> ViewTransition {
+    override func prepareTransition(for route: ResultRemainingRoute) -> ViewTransition {
         switch route {
         case let .detail(media):
             let detailViewController = container.resolve(DetailViewController.self, argument: media)!
